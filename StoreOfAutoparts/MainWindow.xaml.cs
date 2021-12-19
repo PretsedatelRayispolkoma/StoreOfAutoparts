@@ -32,8 +32,16 @@ namespace StoreOfAutoparts
 
         private void ProvidersLB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedProvider = ProvidersLB.SelectedItem as Provider;
-            ConsignmentDG.ItemsSource = db.Consignment.Where(c => c.ProviderID == selectedProvider.ID);
+            try
+            {         
+                var selectedProvider = ProvidersLB.SelectedItem as Provider;
+                ConsignmentDG.ItemsSource = db.Consignment.Where(c => c.ProviderID == selectedProvider.ID).ToList();
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show($"{ex}");
+            }
+
         }
     }
 }

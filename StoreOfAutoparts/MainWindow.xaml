@@ -14,9 +14,13 @@
                         <ColumnDefinition Width="250"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <ListBox x:Name="ProvidersLB" Grid.Column="0" SelectionChanged="ProvidersLB_SelectionChanged"/>
+                    <ListBox x:Name="ProvidersLB" Grid.Column="0"  SelectionChanged="ProvidersLB_SelectionChanged"/>
 
-                    <DataGrid Grid.Column="1" x:Name="ConsignmentDG"/>
+                    <DataGrid Grid.Column="1" x:Name="ConsignmentDG" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </Grid>
             </TabItem>
         </TabControl>
