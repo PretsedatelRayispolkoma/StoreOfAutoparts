@@ -16,14 +16,17 @@
                     </Grid.ColumnDefinitions>
                     <ListBox x:Name="ProvidersLB" Grid.Column="0"  SelectionChanged="ProvidersLB_SelectionChanged"/>
 
-                    <DataGrid Grid.Column="1" x:Name="ConsignmentDG" AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Код запчасти" Binding="{Binding Path=Autopart.PartNumber}"/>
-                            <DataGridTextColumn Header="Цена за единицу" Binding="{Binding Path=PricePerUnit}"/>
-                            <DataGridTextColumn Header="Количество" Binding="{Binding Path=CountOfUnits}"/>
-                            <DataGridTextColumn Header="Дата покупки" Binding="{Binding Path=DateOfPurchase}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <GroupBox Grid.Column="1">
+                        <DataGrid x:Name="ConsignmentDG" AutoGenerateColumns="False" IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Код запчасти" Binding="{Binding Path=Autopart.PartNumber}"/>
+                                <DataGridTextColumn Header="Цена за единицу" Binding="{Binding Path=PricePerUnit}"/>
+                                <DataGridTextColumn Header="Количество" Binding="{Binding Path=CountOfUnits}"/>
+                                <DataGridTextColumn Header="Дата покупки" Binding="{Binding Path=DateOfPurchase}"/>
+                                <DataGridTextColumn Header="Сумма" Binding="{Binding Path=Amount}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>
