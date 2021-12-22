@@ -14,10 +14,18 @@ namespace StoreOfAutoparts.DataBase
     
     public partial class Manufacturer
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Manufacturer()
+        {
+            this.Autopart = new HashSet<Autopart>();
+        }
+    
         public int ID { get; set; }
         public string NameOfManufacturer { get; set; }
         public int CountryID { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Autopart> Autopart { get; set; }
         public virtual Country Country { get; set; }
     }
 }

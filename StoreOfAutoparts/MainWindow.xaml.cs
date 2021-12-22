@@ -28,28 +28,48 @@ namespace StoreOfAutoparts
             InitializeComponent();
             ProvidersLB.ItemsSource = db.Provider.ToList();
             ProvidersLB.DisplayMemberPath = "NameOfProvider";
+
+            AutopartsLB.ItemsSource = db.Autopart.ToList();
+            AutopartsLB.DisplayMemberPath = "PartNumber";
         }
 
         private void ProvidersLB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            var selectedProvider = ProvidersLB.SelectedItem as Provider;
+            var consList = db.Consignment.Where(c => c.ProviderID == selectedProvider.ID).ToList();
+            //ConsignmentDG.ItemsSource = consList;
 
-            try
+            foreach(var i in consList)
             {
-                var selectedProvider = ProvidersLB.SelectedItem as Provider;
-                var consList = db.Consignment.Where(c => c.ProviderID == selectedProvider.ID).ToList();
-                ConsignmentDG.ItemsSource = consList;
-
-                foreach(var i in consList)
-                {
-                    i.Amount = i.CountOfUnits * i.PricePerUnit;
-                }
-
-                ConsignmentDG.ItemsSource = consList;
+                i.Amount = i.CountOfUnits * i.PricePerUnit;
             }
-            catch
+
+            ConsignmentDG.ItemsSource = consList;
+        }
+
+        private void AutopartsLB_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedAutopart = AutopartsLB.SelectedItem as Autopart;
+            var consList = db.Consignment.Where(c => c.AutopartID == selectedAutopart.ID).ToList();
+
+            foreach (var i in consList)
             {
-                MessageBox.Show("Ошибка");
+                i.Amount = i.CountOfUnits * i.PricePerUnit;
             }
+
+            ConsignmentAP_DG.ItemsSource = consList;
+        }
+
+        private void TabItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            var consList = db.Consignment.ToList();
+
+            foreach (var i in consList)
+            {
+                i.Amount = i.CountOfUnits * i.PricePerUnit;
+            }
+
+            ConsignmentALL_DG.ItemsSource = consList;
         }
     }
 }

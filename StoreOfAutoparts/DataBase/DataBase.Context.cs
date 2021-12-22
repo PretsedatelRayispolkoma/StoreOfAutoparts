@@ -29,8 +29,11 @@ namespace StoreOfAutoparts.DataBase
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Consignment> Consignment { get; set; }
         public virtual DbSet<Country> Country { get; set; }
+        public virtual DbSet<Currency> Currency { get; set; }
         public virtual DbSet<Manufacturer> Manufacturer { get; set; }
         public virtual DbSet<Provider> Provider { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<UnitOfMeasurement> UnitOfMeasurement { get; set; }
+        public virtual DbSet<WareHouse> WareHouse { get; set; }
     }
 }

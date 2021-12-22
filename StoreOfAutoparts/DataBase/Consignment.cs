@@ -21,8 +21,14 @@ namespace StoreOfAutoparts.DataBase
         public int CountOfUnits { get; set; }
         public Nullable<decimal> Amount { get; set; }
         public System.DateTime DateOfPurchase { get; set; }
+        public Nullable<int> UnitOfMeasurementID { get; set; }
+        public Nullable<int> CurrencyID { get; set; }
+        public Nullable<int> WareHouseID { get; set; }
     
         public virtual Autopart Autopart { get; set; }
+        public virtual Currency Currency { get; set; }
         public virtual Provider Provider { get; set; }
+        public virtual UnitOfMeasurement UnitOfMeasurement { get; set; }
+        public virtual WareHouse WareHouse { get; set; }
     }
 }

@@ -41,9 +41,20 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="OxyPlot, Version=2.1.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
+      <HintPath>..\packages\OxyPlot.Core.2.1.0\lib\net45\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Wpf, Version=2.1.0.0, Culture=neutral, PublicKeyToken=75e952ba404cdbb0, processorArchitecture=MSIL">
+      <HintPath>..\packages\OxyPlot.Wpf.2.1.0\lib\net45\OxyPlot.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Wpf.Shared, Version=2.1.0.0, Culture=neutral, PublicKeyToken=75e952ba404cdbb0, processorArchitecture=MSIL">
+      <HintPath>..\packages\OxyPlot.Wpf.Shared.2.1.0\lib\net45\OxyPlot.Wpf.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
@@ -85,6 +96,9 @@
     <Compile Include="DataBase\Country.cs">
       <DependentUpon>DataBase.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataBase\Currency.cs">
+      <DependentUpon>DataBase.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataBase\DataBase.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -107,6 +121,12 @@
       <DependentUpon>DataBase.tt</DependentUpon>
     </Compile>
     <Compile Include="DataBase\sysdiagrams.cs">
+      <DependentUpon>DataBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\UnitOfMeasurement.cs">
+      <DependentUpon>DataBase.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataBase\WareHouse.cs">
       <DependentUpon>DataBase.tt</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
@@ -151,6 +171,7 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="DataBase\DataBase.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

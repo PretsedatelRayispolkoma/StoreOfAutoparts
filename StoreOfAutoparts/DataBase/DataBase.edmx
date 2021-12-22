@@ -11,9 +11,8 @@
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="PartNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="NameOfAutopart" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="ManufacturerID" Type="int" Nullable="false" />
-          <Property Name="CountryID" Type="int" Nullable="false" />
+          <Property Name="ProducingCountryID" Type="int" Nullable="false" />
           <Property Name="CategoryID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Category">
@@ -34,6 +33,9 @@
           <Property Name="CountOfUnits" Type="int" Nullable="false" />
           <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="DateOfPurchase" Type="datetime" Nullable="false" />
+          <Property Name="UnitOfMeasurementID" Type="int" />
+          <Property Name="CurrencyID" Type="int" />
+          <Property Name="WareHouseID" Type="int" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -41,6 +43,13 @@
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="NameOfCountry" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Currency">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="NameOfCurrency" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Manufacturer">
           <Key>
@@ -69,6 +78,22 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <EntityType Name="UnitOfMeasurement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="NameOfMeasurement" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WareHouse">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="NameOfWareHouse" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="int" Nullable="false" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <Association Name="FK_Autopart_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="Autopart" Type="Self.Autopart" Multiplicity="*" />
@@ -89,7 +114,19 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Autopart">
-              <PropertyRef Name="CountryID" />
+              <PropertyRef Name="ProducingCountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Autopart_Manufacturer">
+          <End Role="Manufacturer" Type="Self.Manufacturer" Multiplicity="1" />
+          <End Role="Autopart" Type="Self.Autopart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manufacturer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Autopart">
+              <PropertyRef Name="ManufacturerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -105,6 +142,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Consignment_Currency">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="0..1" />
+          <End Role="Consignment" Type="Self.Consignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Consignment">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Consignment_Provider">
           <End Role="Provider" Type="Self.Provider" Multiplicity="1" />
           <End Role="Consignment" Type="Self.Consignment" Multiplicity="*" />
@@ -114,6 +163,30 @@
             </Principal>
             <Dependent Role="Consignment">
               <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Consignment_UnitOfMeasurement">
+          <End Role="UnitOfMeasurement" Type="Self.UnitOfMeasurement" Multiplicity="0..1" />
+          <End Role="Consignment" Type="Self.Consignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UnitOfMeasurement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Consignment">
+              <PropertyRef Name="UnitOfMeasurementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Consignment_WareHouse">
+          <End Role="WareHouse" Type="Self.WareHouse" Multiplicity="0..1" />
+          <End Role="Consignment" Type="Self.Consignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WareHouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Consignment">
+              <PropertyRef Name="WareHouseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -134,9 +207,12 @@
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Consignment" EntityType="Self.Consignment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Manufacturer" EntityType="Self.Manufacturer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Provider" EntityType="Self.Provider" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UnitOfMeasurement" EntityType="Self.UnitOfMeasurement" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WareHouse" EntityType="Self.WareHouse" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Autopart_Category" Association="Self.FK_Autopart_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="Autopart" EntitySet="Autopart" />
@@ -145,12 +221,28 @@
             <End Role="Country" EntitySet="Country" />
             <End Role="Autopart" EntitySet="Autopart" />
           </AssociationSet>
+          <AssociationSet Name="FK_Autopart_Manufacturer" Association="Self.FK_Autopart_Manufacturer">
+            <End Role="Manufacturer" EntitySet="Manufacturer" />
+            <End Role="Autopart" EntitySet="Autopart" />
+          </AssociationSet>
           <AssociationSet Name="FK_Consignment_Autopart" Association="Self.FK_Consignment_Autopart">
             <End Role="Autopart" EntitySet="Autopart" />
             <End Role="Consignment" EntitySet="Consignment" />
           </AssociationSet>
+          <AssociationSet Name="FK_Consignment_Currency" Association="Self.FK_Consignment_Currency">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Consignment" EntitySet="Consignment" />
+          </AssociationSet>
           <AssociationSet Name="FK_Consignment_Provider" Association="Self.FK_Consignment_Provider">
             <End Role="Provider" EntitySet="Provider" />
+            <End Role="Consignment" EntitySet="Consignment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Consignment_UnitOfMeasurement" Association="Self.FK_Consignment_UnitOfMeasurement">
+            <End Role="UnitOfMeasurement" EntitySet="UnitOfMeasurement" />
+            <End Role="Consignment" EntitySet="Consignment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Consignment_WareHouse" Association="Self.FK_Consignment_WareHouse">
+            <End Role="WareHouse" EntitySet="WareHouse" />
             <End Role="Consignment" EntitySet="Consignment" />
           </AssociationSet>
           <AssociationSet Name="FK_Manufacturer_Country" Association="Self.FK_Manufacturer_Country">
@@ -169,12 +261,12 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="PartNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NameOfAutopart" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ManufacturerID" Type="Int32" Nullable="false" />
-          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <Property Name="ProducingCountryID" Type="Int32" Nullable="false" />
           <Property Name="CategoryID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Category" Relationship="Self.FK_Autopart_Category" FromRole="Autopart" ToRole="Category" />
           <NavigationProperty Name="Country" Relationship="Self.FK_Autopart_Country" FromRole="Autopart" ToRole="Country" />
+          <NavigationProperty Name="Manufacturer" Relationship="Self.FK_Autopart_Manufacturer" FromRole="Autopart" ToRole="Manufacturer" />
           <NavigationProperty Name="Consignment" Relationship="Self.FK_Consignment_Autopart" FromRole="Autopart" ToRole="Consignment" />
         </EntityType>
         <EntityType Name="Category">
@@ -196,8 +288,14 @@
           <Property Name="CountOfUnits" Type="Int32" Nullable="false" />
           <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="DateOfPurchase" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UnitOfMeasurementID" Type="Int32" />
+          <Property Name="CurrencyID" Type="Int32" />
+          <Property Name="WareHouseID" Type="Int32" />
           <NavigationProperty Name="Autopart" Relationship="Self.FK_Consignment_Autopart" FromRole="Consignment" ToRole="Autopart" />
+          <NavigationProperty Name="Currency" Relationship="Self.FK_Consignment_Currency" FromRole="Consignment" ToRole="Currency" />
           <NavigationProperty Name="Provider" Relationship="Self.FK_Consignment_Provider" FromRole="Consignment" ToRole="Provider" />
+          <NavigationProperty Name="UnitOfMeasurement" Relationship="Self.FK_Consignment_UnitOfMeasurement" FromRole="Consignment" ToRole="UnitOfMeasurement" />
+          <NavigationProperty Name="WareHouse" Relationship="Self.FK_Consignment_WareHouse" FromRole="Consignment" ToRole="WareHouse" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -208,6 +306,14 @@
           <NavigationProperty Name="Autopart" Relationship="Self.FK_Autopart_Country" FromRole="Country" ToRole="Autopart" />
           <NavigationProperty Name="Manufacturer" Relationship="Self.FK_Manufacturer_Country" FromRole="Country" ToRole="Manufacturer" />
         </EntityType>
+        <EntityType Name="Currency">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="NameOfCurrency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Consignment" Relationship="Self.FK_Consignment_Currency" FromRole="Currency" ToRole="Consignment" />
+        </EntityType>
         <EntityType Name="Manufacturer">
           <Key>
             <PropertyRef Name="ID" />
@@ -215,6 +321,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="NameOfManufacturer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Autopart" Relationship="Self.FK_Autopart_Manufacturer" FromRole="Manufacturer" ToRole="Autopart" />
           <NavigationProperty Name="Country" Relationship="Self.FK_Manufacturer_Country" FromRole="Manufacturer" ToRole="Country" />
         </EntityType>
         <EntityType Name="Provider">
@@ -237,6 +344,24 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
+        <EntityType Name="UnitOfMeasurement">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="NameOfMeasurement" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Consignment" Relationship="Self.FK_Consignment_UnitOfMeasurement" FromRole="UnitOfMeasurement" ToRole="Consignment" />
+        </EntityType>
+        <EntityType Name="WareHouse">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="NameOfWareHouse" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="Int32" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Consignment" Relationship="Self.FK_Consignment_WareHouse" FromRole="WareHouse" ToRole="Consignment" />
+        </EntityType>
         <Association Name="FK_Autopart_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="Autopart" Type="Self.Autopart" Multiplicity="*" />
@@ -257,7 +382,19 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Autopart">
-              <PropertyRef Name="CountryID" />
+              <PropertyRef Name="ProducingCountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Autopart_Manufacturer">
+          <End Role="Manufacturer" Type="Self.Manufacturer" Multiplicity="1" />
+          <End Role="Autopart" Type="Self.Autopart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manufacturer">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Autopart">
+              <PropertyRef Name="ManufacturerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -273,6 +410,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Consignment_Currency">
+          <End Role="Currency" Type="Self.Currency" Multiplicity="0..1" />
+          <End Role="Consignment" Type="Self.Consignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Currency">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Consignment">
+              <PropertyRef Name="CurrencyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Consignment_Provider">
           <End Role="Provider" Type="Self.Provider" Multiplicity="1" />
           <End Role="Consignment" Type="Self.Consignment" Multiplicity="*" />
@@ -282,6 +431,30 @@
             </Principal>
             <Dependent Role="Consignment">
               <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Consignment_UnitOfMeasurement">
+          <End Role="UnitOfMeasurement" Type="Self.UnitOfMeasurement" Multiplicity="0..1" />
+          <End Role="Consignment" Type="Self.Consignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UnitOfMeasurement">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Consignment">
+              <PropertyRef Name="UnitOfMeasurementID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Consignment_WareHouse">
+          <End Role="WareHouse" Type="Self.WareHouse" Multiplicity="0..1" />
+          <End Role="Consignment" Type="Self.Consignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WareHouse">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Consignment">
+              <PropertyRef Name="WareHouseID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -302,9 +475,12 @@
           <EntitySet Name="Category" EntityType="Self.Category" />
           <EntitySet Name="Consignment" EntityType="Self.Consignment" />
           <EntitySet Name="Country" EntityType="Self.Country" />
+          <EntitySet Name="Currency" EntityType="Self.Currency" />
           <EntitySet Name="Manufacturer" EntityType="Self.Manufacturer" />
           <EntitySet Name="Provider" EntityType="Self.Provider" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="UnitOfMeasurement" EntityType="Self.UnitOfMeasurement" />
+          <EntitySet Name="WareHouse" EntityType="Self.WareHouse" />
           <AssociationSet Name="FK_Autopart_Category" Association="Self.FK_Autopart_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="Autopart" EntitySet="Autopart" />
@@ -313,12 +489,28 @@
             <End Role="Country" EntitySet="Country" />
             <End Role="Autopart" EntitySet="Autopart" />
           </AssociationSet>
+          <AssociationSet Name="FK_Autopart_Manufacturer" Association="Self.FK_Autopart_Manufacturer">
+            <End Role="Manufacturer" EntitySet="Manufacturer" />
+            <End Role="Autopart" EntitySet="Autopart" />
+          </AssociationSet>
           <AssociationSet Name="FK_Consignment_Autopart" Association="Self.FK_Consignment_Autopart">
             <End Role="Autopart" EntitySet="Autopart" />
             <End Role="Consignment" EntitySet="Consignment" />
           </AssociationSet>
+          <AssociationSet Name="FK_Consignment_Currency" Association="Self.FK_Consignment_Currency">
+            <End Role="Currency" EntitySet="Currency" />
+            <End Role="Consignment" EntitySet="Consignment" />
+          </AssociationSet>
           <AssociationSet Name="FK_Consignment_Provider" Association="Self.FK_Consignment_Provider">
             <End Role="Provider" EntitySet="Provider" />
+            <End Role="Consignment" EntitySet="Consignment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Consignment_UnitOfMeasurement" Association="Self.FK_Consignment_UnitOfMeasurement">
+            <End Role="UnitOfMeasurement" EntitySet="UnitOfMeasurement" />
+            <End Role="Consignment" EntitySet="Consignment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Consignment_WareHouse" Association="Self.FK_Consignment_WareHouse">
+            <End Role="WareHouse" EntitySet="WareHouse" />
             <End Role="Consignment" EntitySet="Consignment" />
           </AssociationSet>
           <AssociationSet Name="FK_Manufacturer_Country" Association="Self.FK_Manufacturer_Country">
@@ -337,9 +529,8 @@
               <MappingFragment StoreEntitySet="Autopart">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="PartNumber" ColumnName="PartNumber" />
-                <ScalarProperty Name="NameOfAutopart" ColumnName="NameOfAutopart" />
                 <ScalarProperty Name="ManufacturerID" ColumnName="ManufacturerID" />
-                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="ProducingCountryID" ColumnName="ProducingCountryID" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -362,6 +553,9 @@
                 <ScalarProperty Name="CountOfUnits" ColumnName="CountOfUnits" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="DateOfPurchase" ColumnName="DateOfPurchase" />
+                <ScalarProperty Name="UnitOfMeasurementID" ColumnName="UnitOfMeasurementID" />
+                <ScalarProperty Name="CurrencyID" ColumnName="CurrencyID" />
+                <ScalarProperty Name="WareHouseID" ColumnName="WareHouseID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -370,6 +564,14 @@
               <MappingFragment StoreEntitySet="Country">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="NameOfCountry" ColumnName="NameOfCountry" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Currency">
+            <EntityTypeMapping TypeName="AutoPartsStoreModel.Currency">
+              <MappingFragment StoreEntitySet="Currency">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NameOfCurrency" ColumnName="NameOfCurrency" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -400,6 +602,24 @@
                 <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
                 <ScalarProperty Name="version" ColumnName="version" />
                 <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UnitOfMeasurement">
+            <EntityTypeMapping TypeName="AutoPartsStoreModel.UnitOfMeasurement">
+              <MappingFragment StoreEntitySet="UnitOfMeasurement">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NameOfMeasurement" ColumnName="NameOfMeasurement" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WareHouse">
+            <EntityTypeMapping TypeName="AutoPartsStoreModel.WareHouse">
+              <MappingFragment StoreEntitySet="WareHouse">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NameOfWareHouse" ColumnName="NameOfWareHouse" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
