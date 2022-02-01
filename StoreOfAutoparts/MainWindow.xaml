@@ -38,7 +38,9 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            
+                            <Button Content="Экспорт в Excel" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="0" Click="Button_Click"/>
+                            <Button x:Name="WordExportBtn" Content="Экспорт в Word" HorizontalAlignment="Center" VerticalAlignment="Center" Width="100" Height="30" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Column="1" Click="WordExportBtn_Click"/>
+
                         </Grid>
                     </Grid>
                 </Grid>
